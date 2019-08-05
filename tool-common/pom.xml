@@ -5,11 +5,10 @@
 	<parent>
 		<groupId>com.springboot</groupId>
 		<artifactId>boot-tool</artifactId>
-		<version>${tool.version}</version>
+		<version>${revision}</version>
 	</parent>
 	<groupId>com.springboot.tool</groupId>
 	<artifactId>tool-common</artifactId>
-	<version>${tool.version}</version>
 	<name>tool-common</name>
 
 	<properties>

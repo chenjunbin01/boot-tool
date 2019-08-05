@@ -10,24 +10,19 @@
     </parent>
     <groupId>com.springboot</groupId>
     <artifactId>boot-tool</artifactId>
-    <version>${tool.version}</version>
+    <version>${revision}</version>
     <name>boot-tool</name>
     <description>Demo project for Spring Boot</description>
     <packaging>pom</packaging>
 
     <properties>
+        <revision>1.1-SNAPSHOT</revision>
         <java.version>1.8</java.version>
-        <tool.version>1.0-SNAPSHOT</tool.version>
         <start-class>com.springboot.tool.web.ToolWebApplication</start-class>
     </properties>
 
 
-    <modules>
-        <module>tool-client</module>
-        <module>tool-web</module>
-        <module>tool-common</module>
-        <module>tool-core</module>
-    </modules>
+
 
 
     <dependencies>
@@ -65,14 +60,14 @@
             <artifactId>logback-mdc-ttl</artifactId>
             <version>1.0.2</version>
             <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>com.alibaba</groupId>-->
-                    <!--<artifactId>transmittable-thread-local</artifactId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<groupId>ch.qos.logback</groupId>-->
-                    <!--<artifactId>logback-classic</artifactId>-->
-                <!--</exclusion>-->
+            <!--<exclusion>-->
+            <!--<groupId>com.alibaba</groupId>-->
+            <!--<artifactId>transmittable-thread-local</artifactId>-->
+            <!--</exclusion>-->
+            <!--<exclusion>-->
+            <!--<groupId>ch.qos.logback</groupId>-->
+            <!--<artifactId>logback-classic</artifactId>-->
+            <!--</exclusion>-->
             <!--</exclusions>-->
         </dependency>
         <dependency>
@@ -95,16 +90,16 @@
         <!--<scope>test</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.codehaus.groovy</groupId>-->
-            <!--<artifactId>groovy-all</artifactId>-->
-            <!--<version>2.5.7</version>-->
-            <!--<type>pom</type>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.testng</groupId>-->
-                    <!--<artifactId>testng</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+        <!--<groupId>org.codehaus.groovy</groupId>-->
+        <!--<artifactId>groovy-all</artifactId>-->
+        <!--<version>2.5.7</version>-->
+        <!--<type>pom</type>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<groupId>org.testng</groupId>-->
+        <!--<artifactId>testng</artifactId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
         <!--</dependency>-->
     </dependencies>
 
@@ -113,22 +108,22 @@
             <dependency>
                 <groupId>com.springboot.tool</groupId>
                 <artifactId>tool-web</artifactId>
-                <version>${tool.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.springboot.tool</groupId>
                 <artifactId>tool-core</artifactId>
-                <version>${tool.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.springboot.tool</groupId>
                 <artifactId>tool-client</artifactId>
-                <version>${tool.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.springboot.tool</groupId>
                 <artifactId>tool-common</artifactId>
-                <version>${tool.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
@@ -140,7 +135,6 @@
             <!--<artifactId>mysql-connector-java</artifactId>-->
             <!--<scope>runtime</scope>-->
             <!--</dependency>-->
-
 
 
         </dependencies>
@@ -158,6 +152,44 @@
     <!--</plugins>-->
 
     <!--</build>-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <!--<flattenMode>resolveCiFriendliesOnly</flattenMode>-->
+                    <flattenMode>bom</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <modules>
+        <module>tool-client</module>
+        <module>tool-web</module>
+        <module>tool-common</module>
+        <module>tool-core</module>
+    </modules>
 
 
 </project>

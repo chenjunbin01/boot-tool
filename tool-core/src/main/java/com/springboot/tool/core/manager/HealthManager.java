@@ -1,9 +1,7 @@
 package com.springboot.tool.core.manager;
 
-import com.springboot.tool.core.config.SqlPrintInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +15,8 @@ public class HealthManager {
 
     public String checkHealth() {
         logger.error("hahahaha");
+        logger.info("hahahaha~");
+        logger.warn("hahahaha~ ~");
         return "ok";
     }
 

@@ -1,5 +1,9 @@
 package com.springboot.tool.common.demo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BinaryOperator;
@@ -7,9 +11,7 @@ import java.util.function.BinaryOperator;
 /**
  * @Author chenjunbin
  * @Date 2019/7/5
- * @Description
- *
- * CompletableFuture
+ * @Description CompletableFuture
  * 1、runAsync 异步执行无返回值
  * 2、supplyAsync 异步执行有返回值
  * 3、thenApply 进行交换，上次的返回值作为下次交换的参数，有返回值
@@ -22,36 +24,111 @@ import java.util.function.BinaryOperator;
  * 10、acceptEither 两个CompletionStage，谁计算的快，就用快的那个CompletionStage的结果进行下一步的消耗操作，无返回值
  * 11、runAfterEither 两个CompletionStage，任何一个完成了都会执行下一步的操作（Runnable），无返回值
  * 12、exceptionally 当运行时出现了异常，可以通过exceptionally进行补偿， 有返回值。
- * 13、whenComplete 当运行完成时，对结果的记录，一种是正常执行，返回值。另外一种是遇到异常抛出造成程序的中断。第一个参数为返回结果，第二个为异常信息，无返回值
- * 14、handle 运行完成时，对结果的处理。一种是正常执行，返回值。另外一种是遇到异常抛出造成程序的中断。第一个参数为返回结果，第二个为异常信息，有返回值
- *
+ * 13、whenComplete 当运行完成时，对结果的记录，一种是正常执行，有返回值。另外一种是遇到异常抛出造成程序的中断。第一个参数为返回结果，第二个为异常信息，无返回值
+ * 14、handle 运行完成时，对结果的处理。一种是正常执行，有返回值。另外一种是遇到异常抛出造成程序的中断。第一个参数为返回结果，第二个为异常信息，有返回值
  */
 public class CompletableFutureDemo {
+    private static final Logger log = LoggerFactory.getLogger(CompletableFutureDemo.class);
+
 
     public static void main(String[] args) throws Exception {
 
-        CompletableFuture<Void> runAsync = CompletableFuture
-                .runAsync(() -> System.out.println("hello"));
-        CompletableFuture<String> supplyAsync1 = CompletableFuture.supplyAsync(() -> {
-            return "hello world";
-        }).thenApplyAsync(s -> {
-            System.out.println("--+-");
-            return s + "哈哈1";
-        });
-        CompletableFuture.supplyAsync(() -> {
+
+//        CompletableFuture<Void> runAsync = CompletableFuture
+//                .runAsync(() -> System.out.println("hello"));
+//        CompletableFuture<String> supplyAsync1 = CompletableFuture.supplyAsync(() -> {
+//            return "hello world";
+//        }).thenApplyAsync(s -> {
+//            System.out.println("--+-");
+//            return s + "哈哈1";
+//        });
+//        CompletableFuture.supplyAsync(() -> {
+//            System.out.println("1");
+//            try {
+//                Thread.sleep(2000L);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("11");
+//            return "hello world";
+//        }).thenRun(()-> System.out.println("s"));
+//
+//        System.out.println("2222");
+//        Thread.sleep(3000L);
+//        System.out.println("22");
+
+
+        CompletableFuture<String> res = CompletableFuture.supplyAsync(() -> {
             System.out.println("1");
+            int i = 1, j = 0;
             try {
-                Thread.sleep(2000L);
+                Thread.sleep(5000L);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("11");
+//            System.out.println(i / j);
             return "hello world";
-        }).thenRun(()-> System.out.println("s"));
+        }).exceptionally(e -> {
+            System.out.println("异常为： " + e.getMessage());
+            return null;
+        });
 
-        System.out.println("2222");
-        Thread.sleep(3000L);
-        System.out.println("22");
+        CompletableFuture<String> res2 = CompletableFuture.supplyAsync(() -> {
+            System.out.println("2");
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "hello world";
+        });
+
+        CompletableFuture.runAsync(() -> {
+            System.out.println("21");
+            int i = 1, j = 0;
+            try {
+                System.out.println(i / j);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("21~");
+        });
+
+        CompletableFuture.runAsync(() -> {
+            System.out.println("22");
+            try {
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        System.out.println(res2.get());
+        System.out.println(res.get());
+
+
+        CompletableFuture.runAsync(() -> {
+            getNum();
+        });
+        CompletableFuture.runAsync(() -> {
+            getNum();
+        });
+        CompletableFuture.runAsync(() -> {
+            getNum();
+        });
+        CompletableFuture.runAsync(() -> {
+            getNum();
+        });
+        try {
+            CompletableFuture.runAsync(() -> {
+                getNum();
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(111111);
+        }
+
+
 //        System.out.println(supplyAsync2.get());
 
 //        BinaryOperator<String> calcResults = (f, s) -> f + "$++$" + s;
@@ -69,5 +146,12 @@ public class CompletableFutureDemo {
 //        CompletableFuture<Void> collector = supplyAsync1.acceptEither(supplyAsync2,(s)-> System.out.println(s));
 
 
+    }
+
+
+    private static int getNum() {
+        int i = 1, j = 0;
+            System.out.println(i / j);
+        return 1;
     }
 }

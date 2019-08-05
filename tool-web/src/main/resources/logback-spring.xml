@@ -5,7 +5,7 @@
 
     <property name="log.level.info" value="DEBUG"/>
     <property name="tool.log.root" value="/home/www/logs/boot-tool"/>
-    <property name="pattern" value="%d %logColor(%p) [%t] %blue(%c{2}) %X{traceId:--} %m%n"/>
+    <property name="pattern" value="%d %logColor(%p) [%t] %blue(%c{2}) %X{traceId} - %m%n"/>
 
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- deny all events with a level below INFO, that is TRACE and DEBUG -->

@@ -1,6 +1,7 @@
 package com.springboot.tool.common.aspect;
 
 import com.alibaba.druid.util.StringUtils;
+import com.springboot.tool.common.util.ThreadMDCUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -41,17 +42,13 @@ public class TraceLogAspect {
     @Before(value = "executionService()")
     public void before(JoinPoint jp) {
         logger.info("test");
-        if (StringUtils.isEmpty(MDC.get("traceId"))) {
-            String traceId = UUID.randomUUID().toString().replaceAll("-", "");
-            logger.info("set traceId:{}", traceId);
-            MDC.put("traceId", traceId);
-        }
+        ThreadMDCUtil.init();
     }
 
     @AfterReturning(pointcut = "executionService()")
     public void after() {
         logger.info("clear MDC");
-        MDC.clear();
+        ThreadMDCUtil.clean();
     }
 
 }

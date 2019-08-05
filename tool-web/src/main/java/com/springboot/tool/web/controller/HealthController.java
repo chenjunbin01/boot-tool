@@ -1,6 +1,7 @@
 package com.springboot.tool.web.controller;
 
 import com.springboot.tool.common.consts.TraceConst;
+import com.springboot.tool.common.util.AsyncUtil;
 import com.springboot.tool.core.manager.CacheManager;
 import com.springboot.tool.core.manager.HealthManager;
 import com.springboot.tool.core.mapper.AcitivityMapper;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -51,6 +53,7 @@ public class HealthController {
 
         Thread thread = new Thread(new Runnable() {
             Map<String, String> context = MDC.getCopyOfContextMap();
+
             @Override
             public void run() {
                 log.info("haha2");
@@ -110,5 +113,40 @@ public class HealthController {
 
         log.info("set cache:{}", cacheManager.cacheValue("test11", value, 3L));
         return cacheManager.getValue("test11");
+    }
+
+
+    @RequestMapping("/test")
+    public String test() {
+        healthManager.checkHealth();
+        List<Object> list = null;
+        try {
+            list = AsyncUtil.executeThrown(
+                    () -> healthManager.checkHealth(),
+                    () -> {
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println(1 / 0);
+                        return healthManager.checkHealth();
+                    },
+                    () -> {
+                        try {
+                            Thread.sleep(2000L);
+                            System.out.println(1222222);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        return healthManager.checkHealth();
+                    }
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "ok";
     }
 }

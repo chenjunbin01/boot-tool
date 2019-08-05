@@ -2,16 +2,13 @@ package com.springboot.tool.web.config;
 
 import com.springboot.tool.core.config.SqlPrintInterceptor;
 import com.springboot.tool.web.filter.ServletLogFilter;
+import com.springboot.tool.web.interceptor.LoginInterceptor;
 import com.springboot.tool.web.util.ApplicationContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.servlet.Filter;
-import java.util.List;
 
 
 /**
@@ -23,12 +20,9 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
 
-
-
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**");
     }
     @Bean
     public Filter servletLogFilter() {
