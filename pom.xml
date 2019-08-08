@@ -166,11 +166,6 @@
                         <configuration>
                             <updatePomFile>true</updatePomFile>
                             <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                            <!--<flattenMode>bom</flattenMode>-->
-                            <!--<pomElements>-->
-                                <!--<version>resolve</version>-->
-                                <!--&lt;!&ndash;<parent>expand</parent>&ndash;&gt;-->
-                            <!--</pomElements>-->
                         </configuration>
                     </execution>
                     <execution>
